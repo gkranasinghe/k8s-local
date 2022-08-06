@@ -35,3 +35,11 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+
+# Ignore kubernetes installation outputs and tokens 
+ansible/token.txt
+ansible/kubernetes_join_command
+
+# Ignore kustomize build  charts
+kustomize/**/base/charts

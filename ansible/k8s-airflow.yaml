@@ -1,0 +1,33 @@
+- hosts:
+  - localhost
+  tasks:
+
+
+    # - name: Add airflow repo 
+    #   shell: |
+    #             helm repo add apache-airflow https://airflow.apache.org && helm repo update
+
+    # - name: Install airflow  
+    #   shell: |
+    #             export NAMESPACE=airflow 
+    #             # kubectl create namespace $NAMESPACE
+    #             export RELEASE_NAME=airflow
+    #             helm install $RELEASE_NAME apache-airflow/airflow \
+    #               --namespace $NAMESPACE \
+    #               --set-string "env[0].name=AIRFLOW__CORE__LOAD_EXAMPLES" \
+    #               --set-string "env[0].value=True"
+
+    # - name: Patch airflow  service to expose as a "LoadBalancer"
+    #   shell: |
+    #            kubectl patch svc airflow-webserver -n airflow  -p '{"spec": {"type": "LoadBalancer"}
+    - name: change to kustomize file directory for airflow
+      shell: |
+               cd ../kustomize/airflow
+               kustomize build .   --enable-helm |kubectl apply -f -
+
+    - name: wait for pods to come up
+      shell: kubectl get pods -o json
+      register: kubectl_get_pods
+      until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
+      retries: 10
+      delay: 30

@@ -1,0 +1,12 @@
+resources:
+- base
+
+
+
+patchesJson6902:
+- target:
+    version: v1
+    kind: Service
+    name: airflow-webserver
+    namespace: airflow
+  path: service-type-lb-patch.yaml
