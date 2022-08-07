@@ -1,4 +1,6 @@
-- hosts: master_nodes:worker_nodes
+- hosts: 
+  - k8s-master0
+  - k8s-worker0
   become: true
   become_method: sudo
   become_user: root
